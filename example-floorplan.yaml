@@ -1,0 +1,55 @@
+type: 'custom:floorplan-card'
+title: Example Floorplan
+entity: fp_example
+image: /local/example-floorplan.svg
+stylesheet: /local/floorplan-card-style.css
+
+groups:
+  # Example for sensor's. Their current value and if applicable unit
+  # of measurement will replace the text inside the corresponding
+  # svg elements.
+  - name: Sensors
+    entities:
+      - sensor.owm_temperature
+      - sensor.owm_cloud_coverage
+      - sensor.owm_humidity
+    on_update: 'set_text'
+
+  # Example for lights. Svg elements with their name will be styled
+  # according to the mentioned class as it is specified in the
+  # css file.
+  # In addition the lights can be switched on and off by clicking
+  # on them or by tapping on them in case of a touchscreen.
+  - name: LightSwitches
+    entities:
+       - switch.sample_switch
+       - light.sample_light
+    states:
+      - state: 'on'
+        class: 'light-on'
+      - state: 'off'
+        class: 'light-off'
+    action:
+      service: toggle
+
+  # Example for window sensors. Svg elements with their name will be styled
+  # according to the mentioned class as it is specified in the
+  # css file.
+  - name: Windows
+    entities:
+      - binary_sensor.sample_windows
+    states:
+      - state: 'off'
+        class: 'info-background'
+      - state: 'on'
+        class: 'open-window'
+
+  # Example for movement detection. Svg elements with their name will be styled
+  # according to the mentioned class as it is specified in the
+  # css file.
+  - name: Movement
+    entities:
+      - binary_sensor.sample_pir
+    states:
+      - state: 'on'
+        class: 'movement-bg'
