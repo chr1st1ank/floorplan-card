@@ -1,6 +1,12 @@
 # floorplan-card
 This is a card for [Lovelace](https://www.home-assistant.io/lovelace) on [Home Assistant](https://www.home-assistant.io/)
 which allows to dynamically render an SVG graphic, for example for a floorplan.
+I use it to see the status of all the devices at home on one glance as in the following screenshot from the Home
+Assistant interface:
+
+![floorplan-card in action](img/floorplan-card_in_action.png)
+
+
 It is a replacement for pkozul's great [ha-floorplan](https://github.com/pkozul/ha-floorplan) which sadly no longer
 works under the new Lovelace UI.
 

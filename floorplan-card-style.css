@@ -146,6 +146,9 @@ svg, svg * {
 .movement-bg, .movement-bg * {
   fill: #eff2a4 !important;
 }
+.no-movement-bg, .no-movement-bg * {
+  fill: #eeeeee !important;
+}
 
 /* Open Windows */
 .open-window, .open-window * {
