@@ -72,26 +72,48 @@ class ActiveDrawing extends HTMLElement {
     var svgElem = svg_doc.querySelector('svg');
     svgElem.insertBefore(style, svgElem.firstChild);
 
-    // Set onClick handlers
+    // Set onClick handlers for each entity in a group for actions and more-info dialogue
     this.config.groups.forEach(group => { // For each group of the card's config
       // If the group has an "entities" item
-      if("entities" in group && "action" in group)
+      if("entities" in group)
       {
-          // For each entity set the onClick handler when an action is defined
+          // For each of the entities
           group.entities.forEach(entity_id => {
             var domain = entity_id.split('.')[0];
             var svg_element = svg_doc.getElementById(entity_id);
-            if(group.action.service == "toggle"){
-                // Click event for mouse
-                svg_element.addEventListener('click', this.myHass.callService.bind(
-                    this.myHass, domain, 'toggle', {
-                      "entity_id": entity_id
-                }))
-                // Touch event for touchscreens
-                svg_element.addEventListener('touchend', this.myHass.callService.bind(
-                    this.myHass, domain, 'toggle', {
-                      "entity_id": entity_id
-                }))
+
+            if(svg_element){ // Check if the entity is in the svg graph
+                // Action: Toggle on click/touch
+                if("action" in group && group.action.service == "toggle"){
+                    // Click event for mouse
+                    svg_element.addEventListener('click', this.myHass.callService.bind(
+                        this.myHass, domain, 'toggle', {
+                          'entity_id': entity_id
+                        }
+                    ))
+                    // Touch event for touchscreens
+                    svg_element.addEventListener('touchend', this.myHass.callService.bind(
+                        this.myHass, domain, 'toggle', {
+                          'entity_id': entity_id
+                        }
+                    ))
+                // Default: Open more-info box on click/touch
+                }else{
+                    // Click event for mouse
+                    svg_element.addEventListener('click', e => {
+                            event = new Event('hass-more-info');
+                            event.detail = {'entityId': entity_id};
+                            document.querySelector('home-assistant').dispatchEvent(event);
+                        }
+                    );
+                    // Touch event for touchscreens
+                    svg_element.addEventListener('touchend', e => {
+                            event = new Event("hass-more-info");
+                            event.detail = {entityId: entity_id};
+                            document.querySelector('home-assistant').dispatchEvent(event);
+                        }
+                    );
+                }
             }
           });
       }

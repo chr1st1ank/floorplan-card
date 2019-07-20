@@ -1,14 +1,22 @@
 # floorplan-card
 This is a card for [Lovelace](https://www.home-assistant.io/lovelace) on [Home Assistant](https://www.home-assistant.io/)
 which allows to dynamically render an SVG graphic, for example for a floorplan.
-I use it to see the status of all the devices at home on one glance as in the following screenshot from the Home
+It shows the live status of all the devices at home on one glance as in the following screenshot from the Home
 Assistant interface:
 
 ![floorplan-card in action](img/floorplan-card_in_action.png)
 
+The individual elements of the SVG drawing can be configured to react on clicks. For example the lights in this
+example can be switched on and off by clicking on them. For other elements without a particular action being defined
+the corresponding entity info dialogue opens up:
 
-It is a replacement for pkozul's great [ha-floorplan](https://github.com/pkozul/ha-floorplan) which sadly no longer
-works under the new Lovelace UI.
+![entity dialog opened](img/entity-dialog.png)
+
+For more details on the configuration see the yaml syntax in step 4 below.
+
+This custom card is an alternative for the official
+[picture-elements card](https://www.home-assistant.io/lovelace/picture-elements/) and a replacement for pkozul's
+great [ha-floorplan](https://github.com/pkozul/ha-floorplan) which sadly no longer works under the new Lovelace UI.
 
 ## Installation
 
