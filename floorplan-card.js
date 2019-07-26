@@ -111,6 +111,7 @@ class ActiveDrawing extends HTMLElement {
                             event = new Event("hass-more-info");
                             event.detail = {entityId: entity_id};
                             document.querySelector('home-assistant').dispatchEvent(event);
+                            e.preventDefault();
                         }
                     );
                 }
