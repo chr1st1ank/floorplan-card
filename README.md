@@ -43,7 +43,7 @@ resources:
 ### Step 3: Add an SVG drawing
 
 Create an SVG file, e.g. with a floorplan. For this, for example
-(Inkscape)[https://inkscape.org/en/develop/about-svg/] can be used.
+[Inkscape](https://inkscape.org/en/develop/about-svg/) can be used.
 For each Home Assistant entity to be displayed on the floorplan,
 create one svg element (e.g. a rectangle, text or group).
 Then set the `id` of this element to the full entity id of
@@ -129,7 +129,7 @@ A full example config is contained in [example-floorplan.yaml](example-floorplan
 
 ## Replacing ha-floorplan
 This custom card was written as a replacement for [ha-floorplan](https://github.com/pkozul/ha-floorplan).
-It focuses on the core functionality, though.
+It focuses on the core functionality though.
 So if you only use ha-floorplan for assigning state-dependent css classes e.g. to
 assign a different color to opened or closed windows or illuminated lights or to
 print sensor values onto the picture, you can use this custom card as a drop-in replacement.
