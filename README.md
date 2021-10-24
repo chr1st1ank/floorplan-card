@@ -20,29 +20,27 @@ great [ha-floorplan](https://github.com/pkozul/ha-floorplan) which sadly no long
 
 ## Installation
 
+Installation works as described in the [home-assistant documentation for custom cards](https://developers.home-assistant.io/docs/frontend/custom-ui/lovelace-custom-card/).
+
 ### Step 1: Get the code
 
 Save the following files from this repository to `<config directory>/www/` on your Home Assistant instance:
 
 - floorplan-card.js
 - floorplan-card-style.js
-- example-floorplan.svg
+- example-floorplan.svg (as an example picture)
 
+(if you have recently added the www folder you will need to restart Home Assistant for the files to be picked up).
 
 ### Step 2: Activate the custom card
 
-Link `floorplan-card` inside your `ui-lovelace.yaml` (or in the 'raw configuration' in the UI).
+Open the dashboard where the floorplan should be added, open the edit mode and choose "Manage Resources" from the menu on the top right. Then add a javascript resource with the url `/local/floorplan-card.js` and the type `javascript module`:
 
-```yaml
-resources:
-  - url: /local/floorplan-card.js
-    type: js
-```
-
+![dialogue to add a javascript module](img/add-floorplan-js-resource.png)
 
 ### Step 3: Add an SVG drawing
 
-Create an SVG file, e.g. with a floorplan. For this, for example
+Create an SVG file, e.g. with a floorplan as in `example-floorplan.svg`. For this
 [Inkscape](https://inkscape.org/en/develop/about-svg/) can be used.
 For each Home Assistant entity to be displayed on the floorplan,
 create one svg element (e.g. a rectangle, text or group).
@@ -52,24 +50,25 @@ Home Assistant.
 In the markup code of the svg file, this would for example look like
 (only opening tag):
 ```svg
-<g id="switch.example_switch" inkscape:label="#g77286" transform="translate(2.1166667,-3.7041667)">
+<g id="switch.example_switch" transform="translate(2.1166667,-3.7041667)">
 ```
-
 
 ### Step 4: Configure the custom card
 
-Add a custom element in your `ui-lovelace.yaml` or add it via the UI editor.
-Then define all entities which should be styled in the svg picture.
-Their styles can be specified with css classes and also a "toggle" action for
-lights is supported.
-Sensor values can be printed into the svg picture.
+In the dashboard add a new card of type "Custom: Floorplan Card`. 
+In its settings dialogue define all entities which should be styled in the svg picture.
+
+![Adding a floorplan card to a dashboard](img/add-floorplan-card.png)
+
+The styles can be specified with css classes and also a "toggle" action for
+lights is supported. Styles can be added or finetuned by adjusting the `floorplan-card-style.css` file. Sensor values can be printed into the svg picture with the "set_text" option.
 
 Here is an example of a configuration with all supported functionalities:
 
 ```yaml
 type: 'custom:floorplan-card'
 title: Example Floorplan
-entity: fp_example
+entity: fp-card
 image: /local/example-floorplan.svg
 stylesheet: /local/floorplan-card-style.css
 
@@ -79,20 +78,20 @@ groups:
   # svg elements.
   - name: Sensors
     entities:
-      - sensor.owm_temperature
-      - sensor.owm_cloud_coverage
-      - sensor.owm_humidity
+      - sensor.openweathermap_temperature
+      - sensor.openweathermap_condition
+      - sensor.openweathermap_humidity
     on_update: 'set_text'
 
-  # Example for lights. Svg elements with their name will be styled
+  # Example for lights with "toggle" feature. 
+  # Svg elements with their name will be styled
   # according to the mentioned class as it is specified in the
   # css file.
   # In addition the lights can be switched on and off by clicking
   # on them or by tapping on them in case of a touchscreen.
-  - name: LightSwitches
+  - name: LightToggles
     entities:
-       - switch.sample_switch
-       - light.sample_light
+       - switch.ug_bad_licht
     states:
       - state: 'on'
         class: 'light-on'
@@ -101,12 +100,26 @@ groups:
     action:
       service: toggle
 
+  # Example for lights with info dialogue. 
+  # Svg elements with their name will be styled
+  # according to the mentioned class as it is specified in the
+  # css file.
+  # When clicking or tapping on them the "more info" dialogue opens.
+  - name: LightMoreInfo
+    entities:
+       - light.eg_flur_led
+    states:
+      - state: 'on'
+        class: 'light-on'
+      - state: 'off'
+        class: 'light-off'
+
   # Example for window sensors. Svg elements with their name will be styled
   # according to the mentioned class as it is specified in the
   # css file.
   - name: Windows
     entities:
-      - binary_sensor.sample_windows
+      - binary_sensor.ug_hobby_fenster
     states:
       - state: 'off'
         class: 'info-background'
@@ -118,7 +131,7 @@ groups:
   # css file.
   - name: Movement
     entities:
-      - binary_sensor.sample_pir
+      - binary_sensor.ug_hobby_bwm2
     states:
       - state: 'on'
         class: 'movement-bg'
@@ -126,6 +139,9 @@ groups:
 
 A full example config is contained in [example-floorplan.yaml](example-floorplan.yaml).
 
+## Troubleshooting
+
+If something doesn't work, the issue may be within the SVG file. For example sometimes the element IDs are not set entirely correctly. For debugging open the browser's developer tools (`F12` in Chrome or Firefox) and watch out for warning messages in the javascript console when reloading the dashboard.
 
 ## Replacing ha-floorplan
 This custom card was written as a replacement for [ha-floorplan](https://github.com/pkozul/ha-floorplan).
@@ -135,5 +151,5 @@ assign a different color to opened or closed windows or illuminated lights or to
 print sensor values onto the picture, you can use this custom card as a drop-in replacement.
 Simply take your floorplan/svg file and the css styles. The configuration might be
 needed to adjusted slightly, but most things should stay the same.
-One shortcomming is that jinja template literals are not supported. Instead
+One shortcoming is that jinja template literals are not supported. Instead
 you have to use 'on_update: set_text' tags in the yaml file.
