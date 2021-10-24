@@ -35,6 +35,8 @@ class ActiveDrawing extends HTMLElement {
                 var entity = svg_doc.getElementById(entity_id);
                 if(entity){
                     entity.setAttribute("class", style_class);
+                }else{
+                    console.warn("Cannot apply style class because svg is missing element with id " + entity_id);
                 }
               });
           }
@@ -55,7 +57,14 @@ class ActiveDrawing extends HTMLElement {
                 // Get svg element and write text
                 var element = svg_doc.getElementById(entity_id);
                 if(element){
+                    // Is the actual text wrapped into a nested tspan?
+                    const tspans = element.getElementsByTagName("tspan");
+                    if(tspans.length == 1){
+                      element = tspans[0];
+                    }
                     element.textContent = state_str;
+                }else{
+                    console.warn("Cannot set text because svg is missing element with id " + entity_id);
                 }
               });
           }
@@ -85,36 +94,34 @@ class ActiveDrawing extends HTMLElement {
             if(svg_element){ // Check if the entity is in the svg graph
                 // Action: Toggle on click/touch
                 if("action" in group && group.action.service == "toggle"){
+                    // Bind parameters to hass service action function
+                    const toggle_func = this.myHass.callService.bind(
+                          this.myHass, domain, 'toggle', { 'entity_id': entity_id }
+                    );
                     // Click event for mouse
-                    svg_element.addEventListener('click', this.myHass.callService.bind(
-                        this.myHass, domain, 'toggle', {
-                          'entity_id': entity_id
-                        }
-                    ))
+                    svg_element.addEventListener('click', function(event){ toggle_func(); } );
                     // Touch event for touchscreens
-                    svg_element.addEventListener('touchend', this.myHass.callService.bind(
-                        this.myHass, domain, 'toggle', {
-                          'entity_id': entity_id
-                        }
-                    ))
+                    svg_element.addEventListener('touchend', function(event){ toggle_func(); } );
                 // Default: Open more-info box on click/touch
                 }else{
                     // Click event for mouse
                     svg_element.addEventListener('click', e => {
-                            event = new Event('hass-more-info');
-                            event.detail = {'entityId': entity_id};
-                            document.querySelector('home-assistant').dispatchEvent(event);
+                            var new_event = new Event('hass-more-info');
+                            new_event.detail = {'entityId': entity_id};
+                            document.querySelector('home-assistant').dispatchEvent(new_event);
                         }
                     );
                     // Touch event for touchscreens
                     svg_element.addEventListener('touchend', e => {
-                            event = new Event("hass-more-info");
-                            event.detail = {entityId: entity_id};
-                            document.querySelector('home-assistant').dispatchEvent(event);
+                            var new_event = new Event("hass-more-info");
+                            new_event.detail = {entityId: entity_id};
+                            document.querySelector('home-assistant').dispatchEvent(new_event);
                             e.preventDefault();
                         }
                     );
                 }
+            }else{
+                console.warn("Element with id missing in svg for configured entity " + entity_id)
             }
           });
       }
@@ -179,3 +186,8 @@ class ActiveDrawing extends HTMLElement {
   }
 }
 customElements.define('floorplan-card', ActiveDrawing);
+window.customCards = window.customCards || [];
+window.customCards.push({
+    type: "floorplan-card",
+    name: "Floorplan Card"
+});
