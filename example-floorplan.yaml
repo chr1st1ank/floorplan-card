@@ -1,6 +1,6 @@
 type: 'custom:floorplan-card'
 title: Example Floorplan
-entity: fp_example
+entity: fp-card
 image: /local/example-floorplan.svg
 stylesheet: /local/floorplan-card-style.css
 
@@ -10,20 +10,20 @@ groups:
   # svg elements.
   - name: Sensors
     entities:
-      - sensor.owm_temperature
-      - sensor.owm_cloud_coverage
-      - sensor.owm_humidity
+      - sensor.openweathermap_temperature
+      - sensor.openweathermap_condition
+      - sensor.openweathermap_humidity
     on_update: 'set_text'
 
-  # Example for lights. Svg elements with their name will be styled
+  # Example for lights with "toggle" feature. 
+  # Svg elements with their name will be styled
   # according to the mentioned class as it is specified in the
   # css file.
   # In addition the lights can be switched on and off by clicking
   # on them or by tapping on them in case of a touchscreen.
-  - name: LightSwitches
+  - name: LightToggles
     entities:
-       - switch.sample_switch
-       - light.sample_light
+       - switch.ug_bad_licht
     states:
       - state: 'on'
         class: 'light-on'
@@ -32,12 +32,26 @@ groups:
     action:
       service: toggle
 
+  # Example for lights with info dialogue. 
+  # Svg elements with their name will be styled
+  # according to the mentioned class as it is specified in the
+  # css file.
+  # When clicking or tapping on them the "more info" dialogue opens.
+  - name: LightMoreInfo
+    entities:
+       - light.eg_flur_led
+    states:
+      - state: 'on'
+        class: 'light-on'
+      - state: 'off'
+        class: 'light-off'
+
   # Example for window sensors. Svg elements with their name will be styled
   # according to the mentioned class as it is specified in the
   # css file.
   - name: Windows
     entities:
-      - binary_sensor.sample_windows
+      - binary_sensor.ug_hobby_fenster
     states:
       - state: 'off'
         class: 'info-background'
@@ -49,7 +63,7 @@ groups:
   # css file.
   - name: Movement
     entities:
-      - binary_sensor.sample_pir
+      - binary_sensor.ug_hobby_bwm2
     states:
       - state: 'on'
         class: 'movement-bg'

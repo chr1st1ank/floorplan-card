@@ -1,7 +1,6 @@
 /* SVG shapes */
 
 svg, svg * {
-  vector-effect: non-scaling-stroke !important;
   pointer-events: all !important;
 }
 
@@ -156,4 +155,11 @@ svg, svg * {
   fill-opacity: 0.6 !important;
   stroke: #dd4e16 !important;
   stroke-width: 1px !important;
+}
+
+/* Unavailable entity */
+.unavailable, .unavailable * {
+  fill: #f8ce13a6 !important;
+  stroke: #f8ce13a6 !important;
+  stroke-width: 3px !important;
 }
