@@ -15,8 +15,7 @@ the corresponding entity info dialogue opens up:
 For more details on the configuration see the yaml syntax in step 4 below.
 
 This custom card is an alternative for the official
-[picture-elements card](https://www.home-assistant.io/lovelace/picture-elements/) and a replacement for pkozul's
-great [ha-floorplan](https://github.com/pkozul/ha-floorplan) which sadly no longer works under the new Lovelace UI.
+[picture-elements card](https://www.home-assistant.io/lovelace/picture-elements/) with a different workflow.
 
 ## Installation
 
@@ -143,13 +142,5 @@ A full example config is contained in [example-floorplan.yaml](example-floorplan
 
 If something doesn't work, the issue may be within the SVG file. For example sometimes the element IDs are not set entirely correctly. For debugging open the browser's developer tools (`F12` in Chrome or Firefox) and watch out for warning messages in the javascript console when reloading the dashboard.
 
-## Replacing ha-floorplan
-This custom card was written as a replacement for [ha-floorplan](https://github.com/pkozul/ha-floorplan).
-It focuses on the core functionality though.
-So if you only use ha-floorplan for assigning state-dependent css classes e.g. to
-assign a different color to opened or closed windows or illuminated lights or to
-print sensor values onto the picture, you can use this custom card as a drop-in replacement.
-Simply take your floorplan/svg file and the css styles. The configuration might be
-needed to adjusted slightly, but most things should stay the same.
-One shortcoming is that jinja template literals are not supported. Instead
-you have to use 'on_update: set_text' tags in the yaml file.
+## Alternatives
+This custom card was originally written as a replacement for [ha-floorplan](https://github.com/pkozul/ha-floorplan) when it stopped working with a new UI version. There is an updated and extended version of it by now which you may want to use as alternative: https://github.com/ExperienceLovelace/ha-floorplan.
